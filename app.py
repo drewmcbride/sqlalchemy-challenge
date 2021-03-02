@@ -113,15 +113,24 @@ def start_date(start):
     session = Session(engine)
 
     min_temp = func.min(Measurement.tobs)
-    avg_temp = func.avg(Measurement.tobs)
+    avg_temp = func.round(func.avg(Measurement.tobs))
     max_temp = func.max(Measurement.tobs)
     # Query all temperature observations for the station with the most readings
     temp_results = session.query(min_temp, avg_temp, max_temp).\
     filter(Measurement.date >= start).all()
 
+    temp_data = []
+
+    for min_temp, avg_temp, max_temp in temp_results:
+        temp_dict = {}
+        temp_dict['Minimum Temperature'] = min_temp
+        temp_dict['Average Temperature'] = avg_temp
+        temp_dict['Maximum Temperature'] = max_temp
+        temp_data.append(temp_dict)
+
     session.close()
 
-    return jsonify(temp_results)
+    return jsonify(temp_data[0])
 
 
 @app.route("/api/v1.0/<start>/<end>")
@@ -130,16 +139,25 @@ def start_end_date(start, end):
     session = Session(engine)
 
     min_temp = func.min(Measurement.tobs)
-    avg_temp = func.avg(Measurement.tobs)
+    avg_temp = func.round(func.avg(Measurement.tobs))
     max_temp = func.max(Measurement.tobs)
     # Query all temperature observations for the station with the most readings
     temp_results = session.query(min_temp, avg_temp, max_temp).\
     filter(Measurement.date >= start).\
     filter(Measurement.date <= end).all()
 
+    temp_data = []
+
+    for min_temp, avg_temp, max_temp in temp_results:
+        temp_dict = {}
+        temp_dict['Minimum Temperature'] = min_temp
+        temp_dict['Average Temperature'] = avg_temp
+        temp_dict['Maximum Temperature'] = max_temp
+        temp_data.append(temp_dict)
+
     session.close()
 
-    return jsonify(temp_results)
+    return jsonify(temp_data[0])
 
 
 if __name__ == '__main__':
