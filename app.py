@@ -41,7 +41,8 @@ def home():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        # f"/api/v1.0/<start>"
+        f"/api/v1.0/<start><br/>"
+        f"/api/v1.0/<start>/<end>"
         # Should start and start/end date not appear here?
     )
 
@@ -51,7 +52,7 @@ def precipitation():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    """Return a list of all passenger names"""
+    """Return a list of all Measurements"""
     # Query all measurement dates and precipitation measurements
     results = session.query(Measurement.date, Measurement.prcp).all()
 
@@ -60,7 +61,7 @@ def precipitation():
     # List to hold weather data
     weather_data = []
 
-    # For loop to capture data int dictionary, then into the list
+    # For loop to capture data into dictionary, then into the list
     for date, prcp in results:
         weather_dict = {}
         weather_dict['date'] = date
